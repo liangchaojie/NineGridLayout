@@ -1,11 +1,14 @@
 package com.fuyin.holder;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 import com.fuyin.R;
 import com.fuyin.base.BaseHolder;
 import com.fuyin.model.Girl;
+
+import java.util.List;
 
 
 /**
@@ -29,6 +32,13 @@ public class TextHolder extends BaseHolder<Girl> {
     @Override
     public void bindViewHolder(Girl girl, int position) {
         textView.setText(girl.getName());
+    }
+
+    @Override
+    public void bindViewHolder(Girl girl, int position, List<Object> payloads) {
+        if(payloads!=null){
+            Log.i("TAG", "局部刷新: ");
+        }
     }
 
 }

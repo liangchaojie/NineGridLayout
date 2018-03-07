@@ -2,6 +2,7 @@ package com.fuyin.base;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.ViewGroup;
 
 import java.util.List;
@@ -35,9 +36,9 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseHolder> {
     @Override
     public void onBindViewHolder(BaseHolder holder, int position, List<Object> payloads) {
         if(payloads==null||payloads.size()==0){
-            holder.bindViewHolder(list.get(position),position);
+            onBindViewHolder(holder,position);
         }else {
-            holder.bindViewHolder(holder, position, payloads);
+            holder.bindViewHolder(list.get(position), position, payloads);
         }
     }
 

@@ -56,4 +56,6 @@ public class HomeIndexAdapter extends BaseAdapter<Girl> {
         }
         return holder;
     }
+
+
 }
