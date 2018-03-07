@@ -19,7 +19,6 @@ public class TextHolder extends BaseHolder<Girl> {
 
     public TextHolder(View view) {
         super(view);
-
     }
 
     @Override

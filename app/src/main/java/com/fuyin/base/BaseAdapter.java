@@ -34,7 +34,11 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseHolder> {
 
     @Override
     public void onBindViewHolder(BaseHolder holder, int position, List<Object> payloads) {
-        holder.bindViewHolder(holder, position, payloads);
+        if(payloads==null||payloads.size()==0){
+            holder.bindViewHolder(list.get(position),position);
+        }else {
+            holder.bindViewHolder(holder, position, payloads);
+        }
     }
 
     @Override
