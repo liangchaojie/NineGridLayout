@@ -28,8 +28,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void doLogic() {
         BaseHelper.setLinearLayoutManagerVertical(this,recyclerView,recyAdapter);
-        list.get(2).setName("哈哈哈  我是异类!");
-        recyAdapter.notifyItemChanged(2);
     }
 
     private void initData() {

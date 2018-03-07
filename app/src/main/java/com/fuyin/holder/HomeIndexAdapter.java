@@ -44,7 +44,7 @@ public class HomeIndexAdapter extends BaseAdapter<Girl> {
 
 
     @Override
-    public BaseHolder createBaseHolder(ViewGroup parent, int viewType) {
+    public BaseHolder createBaseHolder(ViewGroup parent, int viewType, BaseAdapter<Girl> tBaseAdapter) {
         BaseHolder holder = null;
         switch (viewType){
             case ITEM_EMPTY:
@@ -54,6 +54,7 @@ public class HomeIndexAdapter extends BaseAdapter<Girl> {
                 holder = new TextHolder(LayoutInflater.from(context).inflate(R.layout.item_text,parent,false));
                 break;
         }
+        holder.setBaseAdapter(tBaseAdapter);
         return holder;
     }
 

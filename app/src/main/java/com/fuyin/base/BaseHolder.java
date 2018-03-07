@@ -12,6 +12,7 @@ import java.util.List;
  */
 
 public abstract class BaseHolder<T> extends RecyclerView.ViewHolder {
+    private BaseAdapter<T> baseAdapter;
 
     public BaseHolder(View itemView) {
         super(itemView);
@@ -20,7 +21,17 @@ public abstract class BaseHolder<T> extends RecyclerView.ViewHolder {
 
     public abstract void initView(View view);
 
-    public abstract void bindViewHolder(T t,int position);
+    public abstract void bindViewHolder(T t, int position);
 
-    public abstract void bindViewHolder(T t,int position,List<Object> payloads);
+    public abstract void bindViewHolder(T t, int position, List<Object> payloads);
+
+    public BaseAdapter<T> getBaseAdapter() {
+        return baseAdapter;
+    }
+
+    public void setBaseAdapter(BaseAdapter<T> baseAdapter) {
+        this.baseAdapter = baseAdapter;
+    }
+
+
 }

@@ -2,7 +2,6 @@ package com.fuyin.base;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.ViewGroup;
 
 import java.util.List;
@@ -24,7 +23,7 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseHolder> {
 
     @Override
     public BaseHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return createBaseHolder(parent,viewType);
+        return createBaseHolder(parent,viewType,this);
     }
 
     @Override
@@ -54,6 +53,6 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseHolder> {
 
 
     public abstract int getHolderType(int position);
-    public abstract BaseHolder createBaseHolder(ViewGroup parent,int viewType);
+    public abstract BaseHolder createBaseHolder(ViewGroup parent, int viewType, BaseAdapter<T> tBaseAdapter);
 
 }
