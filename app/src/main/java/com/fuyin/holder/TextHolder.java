@@ -34,8 +34,4 @@ public class TextHolder extends BaseHolder<Girl> {
         textView.setText(girl.getName());
     }
 
-    @Override
-    public void bindViewHolderPayLoads(Girl girl, int position, List<Object> payloads) {
-    }
-
 }

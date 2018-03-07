@@ -23,7 +23,7 @@ public abstract class BaseHolder<T> extends RecyclerView.ViewHolder {
     public abstract void initView(View view);
 
     public abstract void bindViewHolder(T t, int position);
-    public abstract void bindViewHolderPayLoads(T t, int position, List<Object> payloads);
+    public void bindViewHolderPayLoads(T t, int position, List<Object> payloads){}
 
     void bindViewHolder(T t, int position, List<Object> payloads){
         if(payloads==null){
