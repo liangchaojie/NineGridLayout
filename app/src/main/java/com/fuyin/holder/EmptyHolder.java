@@ -32,21 +32,20 @@ public class EmptyHolder extends BaseHolder<Girl> {
     }
 
     @Override
-    public void bindViewHolder(final Girl girl, int position) {
+    public void bindViewHolder(final Girl girl, final int position) {
+        textView.setText(girl.getName());
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 girl.setName("哈哈 我是异类!");
-                getBaseAdapter().notifyItemChanged(2,2);
+                getAdapter().notifyItemChanged(position,2);
             }
         });
     }
 
     @Override
-    public void bindViewHolder(Girl girl, int position, List<Object> payloads) {
-        if(payloads!=null){
-            Log.i("TAG", "局部刷新: ");
-        }
+    public void bindViewHolderPayLoads(Girl girl, int position, List<Object> payloads) {
+        textView.setText(girl.getName());
     }
 
 }

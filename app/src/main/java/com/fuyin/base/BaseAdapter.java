@@ -23,12 +23,14 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseHolder> {
 
     @Override
     public BaseHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return createBaseHolder(parent,viewType,this);
+        BaseHolder holder = createBaseHolder(parent, viewType);
+        holder.setAdapter(this);
+        return holder;
     }
 
     @Override
     public void onBindViewHolder(BaseHolder holder, int position) {
-        holder.bindViewHolder(list.get(position),position);
+        holder.bindViewHolder(list.get(position),position,null);
     }
 
 
@@ -53,6 +55,6 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseHolder> {
 
 
     public abstract int getHolderType(int position);
-    public abstract BaseHolder createBaseHolder(ViewGroup parent, int viewType, BaseAdapter<T> tBaseAdapter);
+    public abstract BaseHolder createBaseHolder(ViewGroup parent, int viewType);
 
 }

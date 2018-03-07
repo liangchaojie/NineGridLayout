@@ -35,10 +35,7 @@ public class TextHolder extends BaseHolder<Girl> {
     }
 
     @Override
-    public void bindViewHolder(Girl girl, int position, List<Object> payloads) {
-        if(payloads!=null){
-            Log.i("TAG", "局部刷新: ");
-        }
+    public void bindViewHolderPayLoads(Girl girl, int position, List<Object> payloads) {
     }
 
 }
