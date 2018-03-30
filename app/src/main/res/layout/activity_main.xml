@@ -5,11 +5,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:orientation="vertical"
-    android:layout_height="match_parent"
-    tools:context="com.test.MainActivity">
+    android:layout_height="match_parent">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerview"
+    <com.fuyin.demo.ninegrid.NineGridTestLayout
+        android:id="@+id/nineLayout"
+        android:layout_marginTop="8dp"
+        app:sapcing="4dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content">
+    </com.fuyin.demo.ninegrid.NineGridTestLayout>
 </LinearLayout>
