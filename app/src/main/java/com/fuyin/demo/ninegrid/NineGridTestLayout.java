@@ -1,12 +1,14 @@
 package com.fuyin.demo.ninegrid;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.AttributeSet;
 import android.widget.Toast;
 
 
 import com.bumptech.glide.Glide;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -40,6 +42,9 @@ public class NineGridTestLayout extends NineGridLayout {
 
     @Override
     protected void onClickImage(int i, String url, List<String> urlList) {
-        Toast.makeText(mContext, "点击了图片" + url, Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(context, ImagePreviewActivity.class);
+        intent.putStringArrayListExtra("imageList", (ArrayList<String>) urlList);
+        intent.putExtra("index", i);
+        context.startActivity(intent);
     }
 }
