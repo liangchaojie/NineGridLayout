@@ -7,8 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.bm.library.PhotoView;
 import com.bumptech.glide.Glide;
+import com.github.chrisbanes.photoview.PhotoView;
 
 import java.util.List;
 
@@ -37,14 +37,14 @@ public class ImagePreviewAdapter extends PagerAdapter {
     }
 
     @Override
-    public PhotoView instantiateItem(ViewGroup container, int position) {
+    public Object instantiateItem(ViewGroup container, int position) {
         final PhotoView image = new PhotoView(context);
         // 开启图片缩放功能
         image.setEnabled(true);
         // 设置缩放类型
         image.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        // 设置最大缩放倍数
-        image.setMaxScale(2.5f);
+        image.setMaximumScale(2.0F);
+        image.setMinimumScale(0.8F);
         // 加载图片
         Glide.with(context).load(imageList.get(position)).into(image);
         // 单击图片，返回

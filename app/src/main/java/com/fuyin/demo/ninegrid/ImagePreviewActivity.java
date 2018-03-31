@@ -1,10 +1,9 @@
 package com.fuyin.demo.ninegrid;
 
+import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.fuyin.R;
@@ -18,7 +17,7 @@ public class ImagePreviewActivity extends AppCompatActivity {
 
     private int index;
     private List<String> imageList;
-    private ViewPager viewPager;
+    private CustomViewPager viewPager;
     private LinearLayout main_linear;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
