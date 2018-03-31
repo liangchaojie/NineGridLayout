@@ -31,13 +31,14 @@ public class NineGridTestLayout extends NineGridLayout {
 
     @Override
     protected boolean displayOneImage(final RatioImageView imageView, String url, final int parentWidth) {
-
         return true;
     }
 
     @Override
     protected void displayImage(RatioImageView imageView, String url) {
-        Glide.with(context).load(url).into(imageView);
+        if(context!=null){
+            Glide.with(context).load(url).into(imageView);
+        }
     }
 
     @Override

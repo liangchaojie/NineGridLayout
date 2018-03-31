@@ -42,7 +42,7 @@ public class ImagePreviewAdapter extends PagerAdapter {
         // 开启图片缩放功能
         image.setEnabled(true);
         // 设置缩放类型
-        image.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+        image.setScaleType(ImageView.ScaleType.FIT_CENTER);
         // 设置最大缩放倍数
         image.setMaxScale(2.5f);
         // 加载图片
