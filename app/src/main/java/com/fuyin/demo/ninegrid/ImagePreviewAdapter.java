@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.fuyin.R;
 import com.github.chrisbanes.photoview.PhotoView;
 
 import java.util.List;
@@ -53,6 +54,7 @@ public class ImagePreviewAdapter extends PagerAdapter {
            public void onClick(View v) {
                image.setEnabled(false);
                ((Activity)context).finish();
+               ((Activity)context).overridePendingTransition(0, R.anim.activity_zoom_close);
            }
        });
         container.addView(image);

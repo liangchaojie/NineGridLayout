@@ -42,6 +42,7 @@ public class ImagePreviewActivity extends AppCompatActivity {
             public void onPageSelected(int position) {
                 hideAllIndicator(position);
                 main_linear.getChildAt(position).setEnabled(true);
+                index = position;
             }
 
             @Override
@@ -50,7 +51,6 @@ public class ImagePreviewActivity extends AppCompatActivity {
             }
         });
     }
-
     private void  hideAllIndicator(int position){
         for(int i=0;i<imageList.size();i++){
             if(i!=position){
