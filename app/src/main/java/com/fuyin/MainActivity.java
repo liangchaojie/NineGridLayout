@@ -1,14 +1,12 @@
 package com.fuyin;
 
-import android.content.Context;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
+import android.support.v7.widget.RecyclerView;
 
-import com.fuyin.demo.ninegrid.NineGridTestLayout;
+import com.fuyin.base.BaseHelper;
+import com.fuyin.holder.HomeIndexAdapter;
+import com.fuyin.model.Girl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,22 +14,27 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private NineGridTestLayout nineGridTestLayout;
+    private RecyclerView recyclerView;
+    private HomeIndexAdapter homeIndexAdapter;
     private List<String> imageList;
+    private List<Girl> girlList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        nineGridTestLayout=findViewById(R.id.nineLayout);
+        initView();
         initData();
-        renderView();
+        doLogic();
     }
 
-    private void renderView() {
-        nineGridTestLayout.setIsShowAll(false); //当传入的图片数超过9张时，是否全部显示
-        nineGridTestLayout.setSpacing(5); //动态设置图片之间的间隔
-        nineGridTestLayout.setUrlList(imageList);
+    private void doLogic() {
+        BaseHelper.setLinearLayoutManagerVertical(this,recyclerView,homeIndexAdapter);
     }
+
+    private void initView() {
+        recyclerView = findViewById(R.id.recyclerView);
+    }
+
 
     private void initData() {
         imageList = new ArrayList<>();
@@ -44,7 +47,15 @@ public class MainActivity extends AppCompatActivity {
         imageList.add("http://img4.duitang.com/uploads/item/201509/26/20150926014223_BW8EG.jpeg");
         imageList.add("http://mvimg10.meitudata.com/569b9090af0526344.jpg");
         imageList.add("http://img.mp.sohu.com/upload/20170703/c8c1818222a547f78585f9b357c93613_th.png");
+
+        girlList = new ArrayList<>();
+        for(int i=0;i<10;i++){
+            Girl girl = new Girl();
+            girl.setName(i+"号选手");
+            girl.setImageList(imageList);
+            girlList.add(girl);
+        }
+
+        homeIndexAdapter = new HomeIndexAdapter(this,girlList);
     }
-
-
 }

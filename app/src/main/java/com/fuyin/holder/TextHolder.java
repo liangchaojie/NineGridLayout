@@ -1,14 +1,12 @@
 package com.fuyin.holder;
 
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 import com.fuyin.R;
 import com.fuyin.base.BaseHolder;
+import com.fuyin.demo.ninegrid.NineGridTestLayout;
 import com.fuyin.model.Girl;
-
-import java.util.List;
 
 
 /**
@@ -18,8 +16,8 @@ import java.util.List;
  */
 
 public class TextHolder extends BaseHolder<Girl> {
-    public TextView textView;
-
+    private TextView textView;
+    private NineGridTestLayout nineGridTestLayout;
     public TextHolder(View view) {
         super(view);
     }
@@ -27,11 +25,16 @@ public class TextHolder extends BaseHolder<Girl> {
     @Override
     public void initView(View view) {
         textView = view.findViewById(R.id.tv);
+        nineGridTestLayout = view.findViewById(R.id.nineLayout);
     }
 
     @Override
     public void bindViewHolder(Girl girl, int position) {
         textView.setText(girl.getName());
+        nineGridTestLayout.setIsShowAll(false); //当传入的图片数超过9张时，是否全部显示
+        nineGridTestLayout.setSpacing(5); //动态设置图片之间的间隔
+        nineGridTestLayout.setUrlList(girl.getImageList());
     }
+
 
 }

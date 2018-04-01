@@ -1,5 +1,7 @@
 package com.fuyin.model;
 
+import java.util.List;
+
 /**
  * Description
  * Created by Administrator
@@ -9,6 +11,7 @@ package com.fuyin.model;
 public class Girl {
     private String name;
     private String address;
+    private List<String> imageList;
     private int type;
 
     public String getName() {
@@ -33,5 +36,13 @@ public class Girl {
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    public List<String> getImageList() {
+        return imageList;
+    }
+
+    public void setImageList(List<String> imageList) {
+        this.imageList = imageList;
     }
 }

@@ -33,12 +33,7 @@ public class HomeIndexAdapter extends BaseAdapter<Girl> {
 
     @Override
     public int getHolderType(int position) {
-        Girl girl = list.get(position);
-        if(girl.getType()==0){
-            return ITEM_TEXT;
-        }else {
-            return ITEM_EMPTY;
-        }
+        return ITEM_TEXT;
     }
 
 
