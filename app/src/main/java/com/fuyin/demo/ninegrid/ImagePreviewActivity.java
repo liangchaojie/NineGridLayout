@@ -17,6 +17,7 @@ import java.util.List;
 public class ImagePreviewActivity extends AppCompatActivity {
 
     private int index;
+    private int itemPosition;
     private List<String> imageList;
     private CustomViewPager viewPager;
     private LinearLayout main_linear;
@@ -74,7 +75,7 @@ public class ImagePreviewActivity extends AppCompatActivity {
     }
 
     private void renderView() {
-        ImagePreviewAdapter adapter = new ImagePreviewAdapter(this,imageList);
+        ImagePreviewAdapter adapter = new ImagePreviewAdapter(this,imageList,itemPosition);
         viewPager.setAdapter(adapter);
         viewPager.setCurrentItem(index);
     }
@@ -82,6 +83,7 @@ public class ImagePreviewActivity extends AppCompatActivity {
     private void getIntentData() {
         if(getIntent()!=null){
             index = getIntent().getIntExtra("index", 0);
+            itemPosition = getIntent().getIntExtra("itemPosition", 0);
             imageList = getIntent().getStringArrayListExtra("imageList");
         }
     }

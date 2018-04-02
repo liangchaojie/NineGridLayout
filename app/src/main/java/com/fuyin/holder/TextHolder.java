@@ -31,6 +31,7 @@ public class TextHolder extends BaseHolder<Girl> {
     @Override
     public void bindViewHolder(Girl girl, int position) {
         textView.setText(girl.getName());
+        nineGridTestLayout.setItemPosition(position);
         nineGridTestLayout.setIsShowAll(false); //当传入的图片数超过9张时，是否全部显示
         nineGridTestLayout.setSpacing(5); //动态设置图片之间的间隔
         nineGridTestLayout.setUrlList(girl.getImageList());

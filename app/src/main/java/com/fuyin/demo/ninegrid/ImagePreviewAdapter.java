@@ -10,6 +10,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.fuyin.R;
+import com.fuyin.utils.Utils;
 import com.github.chrisbanes.photoview.PhotoView;
 
 import java.util.List;
@@ -22,10 +23,11 @@ import java.util.List;
 public class ImagePreviewAdapter extends PagerAdapter {
     private Context context;
     private List<String> imageList;
-
-    public ImagePreviewAdapter(Context context, List<String> imageList) {
+    private int itemPosition;
+    public ImagePreviewAdapter(Context context, List<String> imageList, int itemPosition) {
         this.context = context;
         this.imageList = imageList;
+        this.itemPosition = itemPosition;
     }
 
     @Override
@@ -49,13 +51,16 @@ public class ImagePreviewAdapter extends PagerAdapter {
         image.setMinimumScale(0.8F);
         // 加载图片
         Glide.with(context).load(imageList.get(position)).into(image);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            image.setTransitionName(Utils.getNameByPosition(itemPosition,position));
+        }
         // 单击图片，返回
        image.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
                image.setEnabled(false);
                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                   image.setTransitionName(getNameByPosition(position));
+                   image.setTransitionName(Utils.getNameByPosition(itemPosition,position));
                    ((Activity)context).onBackPressed();
                }else {
                    ((Activity)context).overridePendingTransition(0, R.anim.activity_zoom_close);
@@ -71,38 +76,5 @@ public class ImagePreviewAdapter extends PagerAdapter {
         container.removeView((View) object);
     }
 
-    private String getNameByPosition(int i) {
-        String name = Name.IMAGE_1;
-        switch (i){
-            case 0:
-                name = Name.IMAGE_1;
-                break;
-            case 1:
-                name = Name.IMAGE_2;
-                break;
-            case 2:
-                name = Name.IMAGE_3;
-                break;
-            case 3:
-                name = Name.IMAGE_4;
-                break;
-            case 4:
-                name = Name.IMAGE_5;
-                break;
-            case 5:
-                name = Name.IMAGE_6;
-                break;
-            case 6:
-                name = Name.IMAGE_7;
-                break;
-            case 7:
-                name = Name.IMAGE_8;
-                break;
-            case 8:
-                name = Name.IMAGE_9;
-                break;
 
-        }
-        return name;
-    }
 }

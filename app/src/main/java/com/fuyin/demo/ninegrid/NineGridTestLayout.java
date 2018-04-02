@@ -10,6 +10,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.fuyin.R;
+import com.fuyin.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +24,7 @@ public class NineGridTestLayout extends NineGridLayout {
 
     protected static final int MAX_W_H_RATIO = 3;
     private Context context;
+    private int itemPosition;
     public NineGridTestLayout(Context context) {
         this(context,null);
     }
@@ -41,7 +43,7 @@ public class NineGridTestLayout extends NineGridLayout {
     protected void displayImage(int position,RatioImageView imageView, String url) {
         if(context!=null){
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                imageView.setTransitionName(getNameByPosition(position));
+                imageView.setTransitionName(Utils.getNameByPosition(itemPosition,position));
             }
             Glide.with(context).load(url).into(imageView);
         }
@@ -53,10 +55,11 @@ public class NineGridTestLayout extends NineGridLayout {
         Intent intent = new Intent(context, ImagePreviewActivity.class);
         intent.putStringArrayListExtra("imageList", (ArrayList<String>) urlList);
         intent.putExtra("index", i);
+        intent.putExtra("itemPosition", getItemPosition());
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             ActivityOptions options = ActivityOptions
-                    .makeSceneTransitionAnimation((Activity) context, imageView, getNameByPosition(i));
+                    .makeSceneTransitionAnimation((Activity) context, imageView, Utils.getNameByPosition(itemPosition,i));
             context.startActivity(intent, options.toBundle());
         }else {
             context.startActivity(intent);
@@ -64,38 +67,12 @@ public class NineGridTestLayout extends NineGridLayout {
         }
     }
 
-    private String getNameByPosition(int i) {
-        String name = Name.IMAGE_1;
-        switch (i){
-            case 0:
-                name = Name.IMAGE_1;
-                break;
-            case 1:
-                name = Name.IMAGE_2;
-                break;
-            case 2:
-                name = Name.IMAGE_3;
-                break;
-            case 3:
-                name = Name.IMAGE_4;
-                break;
-            case 4:
-                name = Name.IMAGE_5;
-                break;
-            case 5:
-                name = Name.IMAGE_6;
-                break;
-            case 6:
-                name = Name.IMAGE_7;
-                break;
-            case 7:
-                name = Name.IMAGE_8;
-                break;
-            case 8:
-                name = Name.IMAGE_9;
-                break;
 
-        }
-        return name;
+    public int getItemPosition() {
+        return itemPosition;
+    }
+
+    public void setItemPosition(int itemPosition) {
+        this.itemPosition = itemPosition;
     }
 }
