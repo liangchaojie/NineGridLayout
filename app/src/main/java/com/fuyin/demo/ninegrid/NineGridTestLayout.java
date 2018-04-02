@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -56,7 +57,7 @@ public class NineGridTestLayout extends NineGridLayout {
         intent.putStringArrayListExtra("imageList", (ArrayList<String>) urlList);
         intent.putExtra("index", i);
         intent.putExtra("itemPosition", getItemPosition());
-
+        Log.i("TAG", "nine imageview onClickImage: "+Utils.getNameByPosition(itemPosition,i));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             ActivityOptions options = ActivityOptions
                     .makeSceneTransitionAnimation((Activity) context, imageView, Utils.getNameByPosition(itemPosition,i));

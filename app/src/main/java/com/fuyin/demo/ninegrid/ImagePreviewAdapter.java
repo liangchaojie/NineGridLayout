@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
 import android.support.v4.view.PagerAdapter;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -59,6 +60,7 @@ public class ImagePreviewAdapter extends PagerAdapter {
            @Override
            public void onClick(View v) {
                image.setEnabled(false);
+               Log.i("TAG", "back onClickImage: "+Utils.getNameByPosition(itemPosition,position));
                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                    image.setTransitionName(Utils.getNameByPosition(itemPosition,position));
                    ((Activity)context).onBackPressed();
