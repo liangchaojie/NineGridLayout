@@ -1,4 +1,4 @@
-package com.fuyin.demo.ninegrid;
+package com.fuyin.ui;
 
 import android.app.SharedElementCallback;
 import android.content.Intent;
@@ -10,9 +10,10 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import com.fuyin.MainActivity;
 import com.fuyin.R;
 import com.fuyin.constans.P;
+import com.fuyin.views.CustomViewPager;
+import com.fuyin.adapter.ImagePreviewAdapter;
 
 import java.util.List;
 import java.util.Map;

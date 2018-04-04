@@ -1,7 +1,5 @@
 package com.fuyin.utils;
 
-import com.fuyin.demo.ninegrid.Name;
-
 /**
  * @Description:
  * @Author: Liangchaojie

@@ -13,11 +13,11 @@
     android:textSize="16sp"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content" />
-    <com.fuyin.demo.ninegrid.NineGridTestLayout
+    <com.fuyin.views.NineGridTestLayout
         android:id="@+id/nineLayout"
         android:layout_marginTop="10dp"
         android:layout_marginLeft="20dp"
         android:layout_width="200dp"
         android:layout_height="wrap_content">
-    </com.fuyin.demo.ninegrid.NineGridTestLayout>
+    </com.fuyin.views.NineGridTestLayout>
 </LinearLayout>

@@ -1,4 +1,4 @@
-package com.fuyin;
+package com.fuyin.ui;
 
 import android.app.ActivityOptions;
 import android.app.SharedElementCallback;
@@ -6,15 +6,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 
+import com.fuyin.R;
 import com.fuyin.base.BaseHelper;
 import com.fuyin.constans.P;
-import com.fuyin.demo.ninegrid.ImagePreviewActivity;
-import com.fuyin.holder.HomeIndexAdapter;
+import com.fuyin.adapter.HomeIndexAdapter;
 import com.fuyin.interfaces.OnItemPictureClickListener;
 import com.fuyin.model.Girl;
 import com.fuyin.utils.Utils;

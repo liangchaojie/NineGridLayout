@@ -1,4 +1,4 @@
-package com.fuyin.demo.ninegrid;
+package com.fuyin.utils;
 
 public interface Name {
     String IMAGE_1 = "0";

@@ -5,7 +5,7 @@ import android.widget.TextView;
 
 import com.fuyin.R;
 import com.fuyin.base.BaseHolder;
-import com.fuyin.demo.ninegrid.NineGridTestLayout;
+import com.fuyin.views.NineGridTestLayout;
 import com.fuyin.interfaces.OnItemPictureClickListener;
 import com.fuyin.model.Girl;
 

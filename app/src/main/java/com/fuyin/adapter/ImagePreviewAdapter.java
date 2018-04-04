@@ -1,15 +1,12 @@
-package com.fuyin.demo.ninegrid;
+package com.fuyin.adapter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.os.Build;
 import android.support.v4.view.PagerAdapter;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.fuyin.R;
 import com.fuyin.utils.Utils;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.squareup.picasso.Picasso;

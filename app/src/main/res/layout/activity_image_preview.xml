@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="#ff171b19"
     android:orientation="vertical" >
-    <com.fuyin.demo.ninegrid.CustomViewPager
+    <com.fuyin.views.CustomViewPager
         android:id="@+id/imageBrowseViewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

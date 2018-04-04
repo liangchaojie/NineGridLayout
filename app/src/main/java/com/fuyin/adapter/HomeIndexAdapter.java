@@ -1,4 +1,4 @@
-package com.fuyin.holder;
+package com.fuyin.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import com.fuyin.R;
 import com.fuyin.base.BaseAdapter;
 import com.fuyin.base.BaseHolder;
+import com.fuyin.holder.TextHolder;
 import com.fuyin.interfaces.OnItemPictureClickListener;
 import com.fuyin.model.Girl;
 
@@ -44,9 +45,6 @@ public class HomeIndexAdapter extends BaseAdapter<Girl> {
     public BaseHolder createBaseHolder(ViewGroup parent, int viewType) {
         BaseHolder holder = null;
         switch (viewType){
-            case ITEM_EMPTY:
-                holder = new EmptyHolder(LayoutInflater.from(context).inflate(R.layout.item_empty,parent,false));
-                break;
             case ITEM_TEXT:
                 holder = new TextHolder(LayoutInflater.from(context).inflate(R.layout.item_text,parent,false),listener);
                 break;
