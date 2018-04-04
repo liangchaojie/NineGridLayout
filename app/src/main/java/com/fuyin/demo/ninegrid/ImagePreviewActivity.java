@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 
 import com.fuyin.MainActivity;
 import com.fuyin.R;
+import com.fuyin.constans.P;
 
 import java.util.List;
 import java.util.Map;
@@ -29,7 +30,6 @@ public class ImagePreviewActivity extends AppCompatActivity {
     private int            mStartPosition;
     private int            mCurrentPosition;
     private ImagePreviewAdapter adapter;
-    public static final String EXTRA_START_POSITION = "start_position";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,8 +46,9 @@ public class ImagePreviewActivity extends AppCompatActivity {
     public void finishAfterTransition() {
         mIsReturning = true;
         Intent data = new Intent();
-        data.putExtra(MainActivity.EXTRA_START_POSITION, mStartPosition);
-        data.putExtra(MainActivity.EXTRA_CURRENT_POSITION, mCurrentPosition);
+        data.putExtra(P.START_IAMGE_POSITION, mStartPosition);
+        data.putExtra(P.CURRENT_IAMGE_POSITION, mCurrentPosition);
+        data.putExtra(P.CURRENT_ITEM_POSITION, itemPosition);
         setResult(RESULT_OK, data);
         super.finishAfterTransition();
     }
@@ -106,8 +107,8 @@ public class ImagePreviewActivity extends AppCompatActivity {
 
     private void getIntentData() {
         if(getIntent()!=null){
-            mStartPosition = getIntent().getIntExtra(EXTRA_START_POSITION, 0);
-            itemPosition = getIntent().getIntExtra("itemPosition", 0);
+            mStartPosition = getIntent().getIntExtra(P.START_IAMGE_POSITION, 0);
+            itemPosition = getIntent().getIntExtra(P.START_ITEM_POSITION, 0);
             imageList = getIntent().getStringArrayListExtra("imageList");
         }
     }

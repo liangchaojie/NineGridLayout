@@ -11,13 +11,12 @@ import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 
 import com.fuyin.base.BaseHelper;
+import com.fuyin.constans.P;
 import com.fuyin.demo.ninegrid.ImagePreviewActivity;
 import com.fuyin.holder.HomeIndexAdapter;
 import com.fuyin.interfaces.OnItemPictureClickListener;
 import com.fuyin.model.Girl;
 import com.fuyin.utils.Utils;
-import com.github.chrisbanes.photoview.PhotoView;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -25,13 +24,13 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final String EXTRA_START_POSITION   = "start_position";
-    public static final String EXTRA_CURRENT_POSITION = "current_position";
+
     private RecyclerView recyclerView;
     private HomeIndexAdapter homeIndexAdapter;
     private List<String> imageList;
     private List<Girl> girlList;
     private Bundle   mReenterState;
+    private int itemPosition;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,11 +72,12 @@ public class MainActivity extends AppCompatActivity {
 
         homeIndexAdapter = new HomeIndexAdapter(this, girlList, new OnItemPictureClickListener() {
             @Override
-            public void onItemPictureClick(int itemPosition,int position, String url, List<String> urlList, ImageView imageView) {
+            public void onItemPictureClick(int item,int position, String url, List<String> urlList, ImageView imageView) {
+                itemPosition = item;
                 Intent intent = new Intent(MainActivity.this, ImagePreviewActivity.class);
                 intent.putStringArrayListExtra("imageList", (ArrayList<String>) urlList);
-                intent.putExtra("itemPosition", itemPosition);
-                intent.putExtra(ImagePreviewActivity.EXTRA_START_POSITION, position);
+                intent.putExtra(P.START_ITEM_POSITION, itemPosition);
+                intent.putExtra(P.START_IAMGE_POSITION, position);
 
                 ActivityOptions compat = ActivityOptions.makeSceneTransitionAnimation(MainActivity.this, imageView, imageView.getTransitionName());
                 startActivity(intent, compat.toBundle());
@@ -94,10 +94,9 @@ public class MainActivity extends AppCompatActivity {
     public void onActivityReenter(int requestCode, Intent data) {
         super.onActivityReenter(requestCode, data);
         mReenterState = new Bundle(data.getExtras());
-        int startingPosition = mReenterState.getInt(EXTRA_START_POSITION);
-        int currentPosition = mReenterState.getInt(EXTRA_CURRENT_POSITION);
-        if (startingPosition != currentPosition) {
-            recyclerView.scrollToPosition(currentPosition);
+        int startingPosition = mReenterState.getInt(P.CURRENT_ITEM_POSITION);
+        if (startingPosition != itemPosition) {//如果不是同一个item就滚动到指定的item
+            recyclerView.scrollToPosition(itemPosition);
         }
         postponeEnterTransition();
         recyclerView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
@@ -118,10 +117,10 @@ public class MainActivity extends AppCompatActivity {
         public void onMapSharedElements(List<String> names, Map<String, View> sharedElements) {
             if (mReenterState != null) {
                 //从别的界面返回当前界面
-                int startingPosition = mReenterState.getInt(EXTRA_START_POSITION);
-                int currentPosition = mReenterState.getInt(EXTRA_CURRENT_POSITION);
-                if (startingPosition != currentPosition) {
-                    String newTransitionName = Utils.getNameByPosition(currentPosition,0);
+                int startingPosition = mReenterState.getInt(P.START_IAMGE_POSITION);
+                int currentPosition = mReenterState.getInt(P.CURRENT_IAMGE_POSITION);
+                if (startingPosition != currentPosition) {//如果不是之前的那张图片就切换到指定的图片
+                    String newTransitionName = Utils.getNameByPosition(itemPosition,currentPosition);
                     View newSharedElement = recyclerView.findViewWithTag(newTransitionName);
                     if (newSharedElement != null) {
                         names.clear();
@@ -131,13 +130,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
                 mReenterState = null;
-            }else {
-                //从当前界面进入到别的界面
-                PhotoView photoView = findViewById(R.id.all);
-                if (photoView != null) {
-                    names.add(photoView.getTransitionName());
-                    sharedElements.put(photoView.getTransitionName(), photoView);
-                }
             }
         }
     };

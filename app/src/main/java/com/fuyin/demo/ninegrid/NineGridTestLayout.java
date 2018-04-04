@@ -1,12 +1,7 @@
 package com.fuyin.demo.ninegrid;
 
-import android.app.Activity;
-import android.app.ActivityOptions;
 import android.content.Context;
-import android.content.Intent;
-import android.os.Build;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -14,7 +9,6 @@ import com.fuyin.R;
 import com.fuyin.interfaces.OnItemPictureClickListener;
 import com.fuyin.utils.Utils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -46,8 +40,8 @@ public class NineGridTestLayout extends NineGridLayout {
     protected void displayImage(int position,RatioImageView imageView, String url) {
         if(context!=null){
             Glide.with(context).load(url).into(imageView);
+            imageView.setTag(R.id.item_image,Utils.getNameByPosition(itemPosition,position));
             imageView.setTransitionName(Utils.getNameByPosition(itemPosition,position));
-            imageView.setTag(Utils.getNameByPosition(itemPosition,position));
         }
     }
 

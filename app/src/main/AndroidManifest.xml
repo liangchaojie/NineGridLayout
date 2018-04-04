@@ -18,7 +18,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".demo.ninegrid.ImagePreviewActivity"></activity>
+        <activity android:name=".demo.ninegrid.ImagePreviewActivity" />
+        <activity android:name=".activity.SecondActivity"></activity>
     </application>
 
 </manifest>
