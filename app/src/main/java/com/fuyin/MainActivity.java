@@ -1,27 +1,42 @@
 package com.fuyin;
 
+import android.app.ActivityOptions;
+import android.app.SharedElementCallback;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.view.ViewTreeObserver;
+import android.widget.ImageView;
 
 import com.fuyin.base.BaseHelper;
+import com.fuyin.demo.ninegrid.ImagePreviewActivity;
 import com.fuyin.holder.HomeIndexAdapter;
+import com.fuyin.interfaces.OnItemPictureClickListener;
 import com.fuyin.model.Girl;
+import com.fuyin.utils.Utils;
+import com.github.chrisbanes.photoview.PhotoView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 
 public class MainActivity extends AppCompatActivity {
 
+    public static final String EXTRA_START_POSITION   = "start_position";
+    public static final String EXTRA_CURRENT_POSITION = "current_position";
     private RecyclerView recyclerView;
     private HomeIndexAdapter homeIndexAdapter;
     private List<String> imageList;
     private List<Girl> girlList;
+    private Bundle   mReenterState;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        initShareElement();
         initView();
         initData();
         doLogic();
@@ -56,6 +71,75 @@ public class MainActivity extends AppCompatActivity {
             girlList.add(girl);
         }
 
-        homeIndexAdapter = new HomeIndexAdapter(this,girlList);
+        homeIndexAdapter = new HomeIndexAdapter(this, girlList, new OnItemPictureClickListener() {
+            @Override
+            public void onItemPictureClick(int itemPosition,int position, String url, List<String> urlList, ImageView imageView) {
+                Intent intent = new Intent(MainActivity.this, ImagePreviewActivity.class);
+                intent.putStringArrayListExtra("imageList", (ArrayList<String>) urlList);
+                intent.putExtra("itemPosition", itemPosition);
+                intent.putExtra(ImagePreviewActivity.EXTRA_START_POSITION, position);
+
+                ActivityOptions compat = ActivityOptions.makeSceneTransitionAnimation(MainActivity.this, imageView, imageView.getTransitionName());
+                startActivity(intent, compat.toBundle());
+            }
+        });
     }
+
+
+    private void initShareElement() {
+        setExitSharedElementCallback(mCallback);
+    }
+
+    @Override
+    public void onActivityReenter(int requestCode, Intent data) {
+        super.onActivityReenter(requestCode, data);
+        mReenterState = new Bundle(data.getExtras());
+        int startingPosition = mReenterState.getInt(EXTRA_START_POSITION);
+        int currentPosition = mReenterState.getInt(EXTRA_CURRENT_POSITION);
+        if (startingPosition != currentPosition) {
+            recyclerView.scrollToPosition(currentPosition);
+        }
+        postponeEnterTransition();
+        recyclerView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            @Override
+            public boolean onPreDraw() {
+                recyclerView.getViewTreeObserver().removeOnPreDrawListener(this);
+                recyclerView.requestLayout();
+                startPostponedEnterTransition();
+                return true;
+            }
+        });
+    }
+
+
+    private final SharedElementCallback mCallback = new SharedElementCallback() {
+
+        @Override
+        public void onMapSharedElements(List<String> names, Map<String, View> sharedElements) {
+            if (mReenterState != null) {
+                //从别的界面返回当前界面
+                int startingPosition = mReenterState.getInt(EXTRA_START_POSITION);
+                int currentPosition = mReenterState.getInt(EXTRA_CURRENT_POSITION);
+                if (startingPosition != currentPosition) {
+                    String newTransitionName = Utils.getNameByPosition(currentPosition,0);
+                    View newSharedElement = recyclerView.findViewWithTag(newTransitionName);
+                    if (newSharedElement != null) {
+                        names.clear();
+                        names.add(newTransitionName);
+                        sharedElements.clear();
+                        sharedElements.put(newTransitionName, newSharedElement);
+                    }
+                }
+                mReenterState = null;
+            }else {
+                //从当前界面进入到别的界面
+                PhotoView photoView = findViewById(R.id.all);
+                if (photoView != null) {
+                    names.add(photoView.getTransitionName());
+                    sharedElements.put(photoView.getTransitionName(), photoView);
+                }
+            }
+        }
+    };
+
 }

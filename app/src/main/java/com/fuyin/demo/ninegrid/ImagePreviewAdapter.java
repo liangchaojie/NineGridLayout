@@ -25,6 +25,7 @@ public class ImagePreviewAdapter extends PagerAdapter {
     private Context context;
     private List<String> imageList;
     private int itemPosition;
+    private PhotoView photoView;
     public ImagePreviewAdapter(Context context, List<String> imageList, int itemPosition) {
         this.context = context;
         this.imageList = imageList;
@@ -44,29 +45,20 @@ public class ImagePreviewAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(ViewGroup container, final int position) {
         final PhotoView image = new PhotoView(context);
-        // 开启图片缩放功能
         image.setEnabled(true);
-        // 设置缩放类型
         image.setScaleType(ImageView.ScaleType.FIT_CENTER);
         image.setMaximumScale(2.0F);
         image.setMinimumScale(0.8F);
-        // 加载图片
         Glide.with(context).load(imageList.get(position)).into(image);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            image.setTransitionName(Utils.getNameByPosition(itemPosition,position));
-        }
-        // 单击图片，返回
+
+        image.setTransitionName(Utils.getNameByPosition(itemPosition,position));
+        image.setTag(Utils.getNameByPosition(itemPosition,position));
+
        image.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
                image.setEnabled(false);
-               Log.i("TAG", "back onClickImage: "+Utils.getNameByPosition(itemPosition,position));
-               if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                   image.setTransitionName(Utils.getNameByPosition(itemPosition,position));
-                   ((Activity)context).onBackPressed();
-               }else {
-                   ((Activity)context).overridePendingTransition(0, R.anim.activity_zoom_close);
-               }
+               ((Activity)context).onBackPressed();
            }
        });
         container.addView(image);
@@ -74,9 +66,20 @@ public class ImagePreviewAdapter extends PagerAdapter {
     }
 
     @Override
+    public void setPrimaryItem(ViewGroup container, int position, Object object) {
+        super.setPrimaryItem(container, position, object);
+        photoView = (PhotoView) object;
+    }
+
+
+    @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
         container.removeView((View) object);
     }
 
+
+    public PhotoView getPhotoView() {
+        return photoView;
+    }
 
 }

@@ -11,6 +11,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.fuyin.R;
+import com.fuyin.interfaces.OnItemPictureClickListener;
 import com.fuyin.utils.Utils;
 
 import java.util.ArrayList;
@@ -23,9 +24,10 @@ import java.util.List;
  */
 public class NineGridTestLayout extends NineGridLayout {
 
-    protected static final int MAX_W_H_RATIO = 3;
     private Context context;
     private int itemPosition;
+    private OnItemPictureClickListener listener;
+
     public NineGridTestLayout(Context context) {
         this(context,null);
     }
@@ -43,37 +45,23 @@ public class NineGridTestLayout extends NineGridLayout {
     @Override
     protected void displayImage(int position,RatioImageView imageView, String url) {
         if(context!=null){
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                imageView.setTransitionName(Utils.getNameByPosition(itemPosition,position));
-            }
             Glide.with(context).load(url).into(imageView);
+            imageView.setTransitionName(Utils.getNameByPosition(itemPosition,position));
+            imageView.setTag(Utils.getNameByPosition(itemPosition,position));
         }
     }
 
     @Override
-    protected void onClickImage(int i, String url, List<String> urlList, ImageView imageView) {
-
-        Intent intent = new Intent(context, ImagePreviewActivity.class);
-        intent.putStringArrayListExtra("imageList", (ArrayList<String>) urlList);
-        intent.putExtra("index", i);
-        intent.putExtra("itemPosition", getItemPosition());
-        Log.i("TAG", "nine imageview onClickImage: "+Utils.getNameByPosition(itemPosition,i));
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            ActivityOptions options = ActivityOptions
-                    .makeSceneTransitionAnimation((Activity) context, imageView, Utils.getNameByPosition(itemPosition,i));
-            context.startActivity(intent, options.toBundle());
-        }else {
-            context.startActivity(intent);
-            ((Activity)context).overridePendingTransition(R.anim.activity_zoom_open, 0);
-        }
+    protected void onClickImage(int imageIndex, String url, List<String> urlList, ImageView imageView) {
+        listener.onItemPictureClick(itemPosition,imageIndex,url,urlList,imageView);
     }
 
-
-    public int getItemPosition() {
-        return itemPosition;
-    }
 
     public void setItemPosition(int itemPosition) {
         this.itemPosition = itemPosition;
+    }
+
+    public void setListener(OnItemPictureClickListener listener) {
+        this.listener = listener;
     }
 }

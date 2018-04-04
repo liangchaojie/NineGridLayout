@@ -36,6 +36,7 @@ public abstract class NineGridLayout extends ViewGroup {
     private boolean mIsShowAll = false;
     private boolean mIsFirst = true;
     private List<String> mUrlList = new ArrayList<>();
+    private List<ImageView> imageViewList = new ArrayList<>();
 
     public NineGridLayout(Context context) {
         super(context);

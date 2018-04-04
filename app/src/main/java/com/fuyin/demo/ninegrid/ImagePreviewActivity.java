@@ -1,30 +1,40 @@
 package com.fuyin.demo.ninegrid;
 
+import android.app.SharedElementCallback;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.fuyin.MainActivity;
 import com.fuyin.R;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 图片预览 Activity
  */
 public class ImagePreviewActivity extends AppCompatActivity {
 
-    private int index;
     private int itemPosition;
     private List<String> imageList;
     private CustomViewPager viewPager;
     private LinearLayout main_linear;
+    private boolean      mIsReturning;
+    private int            mStartPosition;
+    private int            mCurrentPosition;
+    private ImagePreviewAdapter adapter;
+    public static final String EXTRA_START_POSITION = "start_position";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_preview);
+        initShareElement();
         getIntentData();
         initView();
         renderView();
@@ -32,8 +42,22 @@ public class ImagePreviewActivity extends AppCompatActivity {
         setListener();
     }
 
+    @Override
+    public void finishAfterTransition() {
+        mIsReturning = true;
+        Intent data = new Intent();
+        data.putExtra(MainActivity.EXTRA_START_POSITION, mStartPosition);
+        data.putExtra(MainActivity.EXTRA_CURRENT_POSITION, mCurrentPosition);
+        setResult(RESULT_OK, data);
+        super.finishAfterTransition();
+    }
+
+    private void initShareElement() {
+        postponeEnterTransition();
+        setEnterSharedElementCallback(mCallback);
+    }
     private void setListener() {
-        main_linear.getChildAt(index).setEnabled(true);
+        main_linear.getChildAt(mStartPosition).setEnabled(true);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -44,7 +68,7 @@ public class ImagePreviewActivity extends AppCompatActivity {
             public void onPageSelected(int position) {
                 hideAllIndicator(position);
                 main_linear.getChildAt(position).setEnabled(true);
-                index = position;
+                mCurrentPosition = position;
             }
 
             @Override
@@ -75,14 +99,14 @@ public class ImagePreviewActivity extends AppCompatActivity {
     }
 
     private void renderView() {
-        ImagePreviewAdapter adapter = new ImagePreviewAdapter(this,imageList,itemPosition);
+        adapter = new ImagePreviewAdapter(this,imageList,itemPosition);
         viewPager.setAdapter(adapter);
-        viewPager.setCurrentItem(index);
+        viewPager.setCurrentItem(mStartPosition);
     }
 
     private void getIntentData() {
         if(getIntent()!=null){
-            index = getIntent().getIntExtra("index", 0);
+            mStartPosition = getIntent().getIntExtra(EXTRA_START_POSITION, 0);
             itemPosition = getIntent().getIntExtra("itemPosition", 0);
             imageList = getIntent().getStringArrayListExtra("imageList");
         }
@@ -110,4 +134,23 @@ public class ImagePreviewActivity extends AppCompatActivity {
             main_linear.addView(view, layoutParams);
         }
     }
+
+    private final SharedElementCallback mCallback = new SharedElementCallback() {
+
+        @Override
+        public void onMapSharedElements(List<String> names, Map<String, View> sharedElements) {
+            if (mIsReturning) {
+                ImageView sharedElement = adapter.getPhotoView();
+                if (sharedElement == null) {
+                    names.clear();
+                    sharedElements.clear();
+                } else if (mStartPosition != mCurrentPosition) {
+                    names.clear();
+                    names.add(sharedElement.getTransitionName());
+                    sharedElements.clear();
+                    sharedElements.put(sharedElement.getTransitionName(), sharedElement);
+                }
+            }
+        }
+    };
 }

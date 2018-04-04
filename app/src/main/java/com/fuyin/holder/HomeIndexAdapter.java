@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import com.fuyin.R;
 import com.fuyin.base.BaseAdapter;
 import com.fuyin.base.BaseHolder;
+import com.fuyin.interfaces.OnItemPictureClickListener;
 import com.fuyin.model.Girl;
 
 import java.util.List;
@@ -24,11 +25,12 @@ public class HomeIndexAdapter extends BaseAdapter<Girl> {
     private Context context;
     private final int ITEM_TEXT=0;
     private final int ITEM_EMPTY=1;
-
-    public HomeIndexAdapter(Context context, List<Girl> list) {
+    private OnItemPictureClickListener listener;
+    public HomeIndexAdapter(Context context, List<Girl> list,OnItemPictureClickListener listener) {
         super(context, list);
         this.list = list;
         this.context = context;
+        this.listener = listener;
     }
 
     @Override
@@ -46,7 +48,7 @@ public class HomeIndexAdapter extends BaseAdapter<Girl> {
                 holder = new EmptyHolder(LayoutInflater.from(context).inflate(R.layout.item_empty,parent,false));
                 break;
             case ITEM_TEXT:
-                holder = new TextHolder(LayoutInflater.from(context).inflate(R.layout.item_text,parent,false));
+                holder = new TextHolder(LayoutInflater.from(context).inflate(R.layout.item_text,parent,false),listener);
                 break;
         }
         return holder;
