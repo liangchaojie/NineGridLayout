@@ -49,9 +49,9 @@ public class ImagePreviewAdapter extends PagerAdapter {
         image.setScaleType(ImageView.ScaleType.FIT_CENTER);
         image.setMaximumScale(2.0F);
         image.setMinimumScale(0.8F);
-        image.setTag(Utils.getNameByPosition(itemPosition,position));
+
         Picasso.with(context).load(imageList.get(position)).into(image);
-        image.setTransitionName(Utils.getNameByPosition(itemPosition,position));
+
 
        image.setOnClickListener(new View.OnClickListener() {
            @Override
@@ -68,6 +68,9 @@ public class ImagePreviewAdapter extends PagerAdapter {
     public void setPrimaryItem(ViewGroup container, int position, Object object) {
         super.setPrimaryItem(container, position, object);
         photoView = (PhotoView) object;
+        photoView.setTag(Utils.getNameByPosition(itemPosition,position));
+        photoView.setTransitionName(Utils.getNameByPosition(itemPosition,position));
+
     }
 
 
