@@ -46,7 +46,7 @@ public class ImagePreviewActivity extends AppCompatActivity {
         setEnterSharedElementCallback(mCallback);
     }
     private void setListener() {
-        main_linear.getChildAt(mStartPosition).setEnabled(true);
+        main_linear.getChildAt(mCurrentPosition).setEnabled(true);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -90,12 +90,13 @@ public class ImagePreviewActivity extends AppCompatActivity {
     private void renderView() {
         adapter = new ImagePreviewAdapter(this,imageList,itemPosition);
         viewPager.setAdapter(adapter);
-        viewPager.setCurrentItem(mStartPosition);
+        viewPager.setCurrentItem(mCurrentPosition);
     }
 
     private void getIntentData() {
         if(getIntent()!=null){
             mStartPosition = getIntent().getIntExtra(P.START_IAMGE_POSITION, 0);
+            mCurrentPosition = mStartPosition;
             itemPosition = getIntent().getIntExtra(P.START_ITEM_POSITION, 0);
             imageList = getIntent().getStringArrayListExtra("imageList");
         }
