@@ -4,10 +4,9 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
-import com.fuyin.R;
 import com.fuyin.interfaces.OnItemPictureClickListener;
 import com.fuyin.utils.Utils;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -39,8 +38,8 @@ public class NineGridTestLayout extends NineGridLayout {
     @Override
     protected void displayImage(int position,RatioImageView imageView, String url) {
         if(context!=null){
-            Glide.with(context).load(url).into(imageView);
-            imageView.setTag(R.id.item_image,Utils.getNameByPosition(itemPosition,position));
+            Picasso.with(context).load(url).into(imageView);
+            imageView.setTag(Utils.getNameByPosition(itemPosition,position));
             imageView.setTransitionName(Utils.getNameByPosition(itemPosition,position));
         }
     }

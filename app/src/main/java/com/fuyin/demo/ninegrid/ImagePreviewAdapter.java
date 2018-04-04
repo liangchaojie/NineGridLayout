@@ -9,10 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
 import com.fuyin.R;
 import com.fuyin.utils.Utils;
 import com.github.chrisbanes.photoview.PhotoView;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -49,8 +49,8 @@ public class ImagePreviewAdapter extends PagerAdapter {
         image.setScaleType(ImageView.ScaleType.FIT_CENTER);
         image.setMaximumScale(2.0F);
         image.setMinimumScale(0.8F);
-        image.setTag(R.id.item_image,Utils.getNameByPosition(itemPosition,position));
-        Glide.with(context).load(imageList.get(position)).into(image);
+        image.setTag(Utils.getNameByPosition(itemPosition,position));
+        Picasso.with(context).load(imageList.get(position)).into(image);
         image.setTransitionName(Utils.getNameByPosition(itemPosition,position));
 
        image.setOnClickListener(new View.OnClickListener() {

@@ -42,19 +42,7 @@ public class ImagePreviewActivity extends AppCompatActivity {
         setListener();
     }
 
-    @Override
-    public void finishAfterTransition() {
-        mIsReturning = true;
-        Intent data = new Intent();
-        data.putExtra(P.START_IAMGE_POSITION, mStartPosition);
-        data.putExtra(P.CURRENT_IAMGE_POSITION, mCurrentPosition);
-        data.putExtra(P.CURRENT_ITEM_POSITION, itemPosition);
-        setResult(RESULT_OK, data);
-        super.finishAfterTransition();
-    }
-
     private void initShareElement() {
-        postponeEnterTransition();
         setEnterSharedElementCallback(mCallback);
     }
     private void setListener() {
@@ -135,6 +123,19 @@ public class ImagePreviewActivity extends AppCompatActivity {
             main_linear.addView(view, layoutParams);
         }
     }
+
+
+    @Override
+    public void finishAfterTransition() {
+        mIsReturning = true;
+        Intent data = new Intent();
+        data.putExtra(P.START_IAMGE_POSITION, mStartPosition);
+        data.putExtra(P.CURRENT_IAMGE_POSITION, mCurrentPosition);
+        data.putExtra(P.CURRENT_ITEM_POSITION, itemPosition);
+        setResult(RESULT_OK, data);
+        super.finishAfterTransition();
+    }
+
 
     private final SharedElementCallback mCallback = new SharedElementCallback() {
 
