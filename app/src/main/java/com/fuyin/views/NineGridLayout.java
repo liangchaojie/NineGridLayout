@@ -2,14 +2,10 @@ package com.fuyin.views;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.util.AttributeSet;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.fuyin.R;
 
@@ -24,6 +20,7 @@ import java.util.TimerTask;
  */
 public abstract class NineGridLayout extends ViewGroup {
     private static final float DEFUALT_SPACING = 3f;
+    private static final int IMAGE_RATIO = 2;//默认图片长宽比例
     private static final int MAX_COUNT = 9;
 
     protected Context mContext;
@@ -59,6 +56,58 @@ public abstract class NineGridLayout extends ViewGroup {
         }
     }
 
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec,heightMeasureSpec);
+        MarginLayoutParams params = null;
+        int size = mUrlList == null ? 0 : mUrlList.size();
+        int widthMode = MeasureSpec.getMode(widthMeasureSpec);
+        int widthSize = MeasureSpec.getSize(widthMeasureSpec);
+        int heightMode = MeasureSpec.getMode(heightMeasureSpec);
+        int heightSize = MeasureSpec.getSize(heightMeasureSpec);
+        measureChildren(widthMeasureSpec,heightMeasureSpec);
+        //开始处理wrap_content,如果一个子元素都没有，就设置为0
+        if (size == 0) {
+            setMeasuredDimension(0,0);
+        } else if (widthMode == MeasureSpec.AT_MOST && heightMode == MeasureSpec.AT_MOST) {
+            //ViewGroup，宽，高都是wrap_content，根据我们的需求，宽度是子控件的宽度，高度则是所有子控件的总和
+            View childOne = getChildAt(0);
+            params = (MarginLayoutParams) childOne.getLayoutParams();
+            int childWidth = childOne.getMeasuredWidth();
+            int childHeight = childOne.getMeasuredHeight();
+            setMeasuredDimension(childWidth + params.leftMargin + params.rightMargin,
+                 childHeight * getChildCount()*IMAGE_RATIO + params.topMargin + params.bottomMargin);
+        } else if (widthMode == MeasureSpec.AT_MOST) {
+            //ViewGroup的宽度为wrap_content,则高度不需要管，宽度还是自控件的宽度
+            View childOne = getChildAt(0);
+            params = (MarginLayoutParams) childOne.getLayoutParams();
+            int childWidth = childOne.getMeasuredWidth();
+            setMeasuredDimension(childWidth + params.leftMargin + params.rightMargin,heightSize);
+        } else if (heightMode == MeasureSpec.AT_MOST) {
+            //ViewGroup的高度为wrap_content,则宽度不需要管，高度为子View的高度和
+            View childOne = getChildAt(0);
+            params = (MarginLayoutParams) childOne.getLayoutParams();
+            int childHeight = childOne.getMeasuredHeight();
+            setMeasuredDimension(widthSize, childHeight * getChildCount()*IMAGE_RATIO + params.topMargin + params.bottomMargin);
+        }
+    }
+
+    @Override
+    public LayoutParams generateLayoutParams(AttributeSet attrs) {
+        return new MarginLayoutParams(getContext(),attrs);
+    }
+
+    @Override
+    protected LayoutParams generateDefaultLayoutParams() {
+        return new MarginLayoutParams(LayoutParams.MATCH_PARENT,
+                LayoutParams.MATCH_PARENT);
+    }
+
+    @Override
+    protected LayoutParams generateLayoutParams(LayoutParams p) {
+        return new MarginLayoutParams(p);
+    }
 
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
@@ -133,7 +182,7 @@ public abstract class NineGridLayout extends ViewGroup {
 
             boolean isShowDefualt = displayOneImage(imageView, url, mTotalWidth);
             if (isShowDefualt) {
-                layoutImageView(imageView, 0, url, false);
+                layoutImageView(imageView, 0, url);
             } else {
                 addView(imageView);
             }
@@ -145,25 +194,8 @@ public abstract class NineGridLayout extends ViewGroup {
 
         for (int i = 0; i < size; i++) {
             String url = mUrlList.get(i);
-            RatioImageView imageView;
-            if (!mIsShowAll) {
-                if (i < MAX_COUNT - 1) {
-                    imageView = createImageView(i, url);
-                    layoutImageView(imageView, i, url, false);
-                } else { //第9张时
-                    if (size <= MAX_COUNT) {//刚好第9张
-                        imageView = createImageView(i, url);
-                        layoutImageView(imageView, i, url, false);
-                    } else {//超过9张
-                        imageView = createImageView(i, url);
-                        layoutImageView(imageView, i, url, true);
-                        break;
-                    }
-                }
-            } else {
-                imageView = createImageView(i, url);
-                layoutImageView(imageView, i, url, false);
-            }
+            RatioImageView imageView = createImageView(i, url);
+            layoutImageView(imageView, i, url);
         }
     }
 
@@ -178,7 +210,7 @@ public abstract class NineGridLayout extends ViewGroup {
 
     private RatioImageView createImageView(final int i, final String url) {
         final RatioImageView imageView = new RatioImageView(mContext);
-        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
         imageView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -191,9 +223,8 @@ public abstract class NineGridLayout extends ViewGroup {
     /**
      * @param imageView
      * @param url
-     * @param showNumFlag 是否在最大值的图片上显示还有未显示的图片张数
      */
-    private void layoutImageView(RatioImageView imageView, int i, String url, boolean showNumFlag) {
+    private void layoutImageView(RatioImageView imageView, int i, String url) {
         final int singleWidth = (int) ((mTotalWidth - mSpacing * (3 - 1)) / 3);
         int singleHeight = singleWidth;
 
@@ -203,26 +234,12 @@ public abstract class NineGridLayout extends ViewGroup {
         int right = left + singleWidth;
         int bottom = top + singleHeight;
 
-        imageView.layout(left, top, right, bottom);
-
-        addView(imageView);
-        if (showNumFlag) {//添加超过最大显示数量的文本
-            int overCount = getListSize(mUrlList) - MAX_COUNT;
-            if (overCount > 0) {
-                float textSize = 30;
-                final TextView textView = new TextView(mContext);
-                textView.setText("+" + String.valueOf(overCount));
-                textView.setTextColor(Color.WHITE);
-                textView.setPadding(0, singleHeight / 2 - getFontHeight(textSize), 0, 0);
-                textView.setTextSize(textSize);
-                textView.setGravity(Gravity.CENTER);
-                textView.setBackgroundColor(Color.BLACK);
-                textView.getBackground().setAlpha(120);
-
-                textView.layout(left, top, right, bottom);
-                addView(textView);
-            }
+        if(getListSize(mUrlList)==1){
+            setOneImageLayoutParams(imageView,singleWidth,singleWidth*IMAGE_RATIO);
+        }else {
+            imageView.layout(left, top, right, bottom);
         }
+        addView(imageView);
         displayImage(i,imageView, url);
     }
 
@@ -275,7 +292,6 @@ public abstract class NineGridLayout extends ViewGroup {
         imageView.layout(0, 0, width, height);
 
         LayoutParams params = getLayoutParams();
-//        params.width = width;
         params.height = height;
         setLayoutParams(params);
     }
@@ -285,13 +301,6 @@ public abstract class NineGridLayout extends ViewGroup {
             return 0;
         }
         return list.size();
-    }
-
-    private int getFontHeight(float fontSize) {
-        Paint paint = new Paint();
-        paint.setTextSize(fontSize);
-        Paint.FontMetrics fm = paint.getFontMetrics();
-        return (int) Math.ceil(fm.descent - fm.ascent);
     }
 
     /**
