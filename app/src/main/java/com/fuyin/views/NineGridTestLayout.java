@@ -11,9 +11,7 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 /**
- * 描述：
- * 作者：HMY
- * 时间：2016/5/12
+ * 一般项目就实现NineGridLayout类即可，如果没有特殊需求，不要改动NineGridLayout类
  */
 public class NineGridTestLayout extends NineGridLayout {
 
@@ -30,10 +28,6 @@ public class NineGridTestLayout extends NineGridLayout {
         this.context = context;
     }
 
-    @Override
-    protected boolean displayOneImage(final RatioImageView imageView, String url, final int parentWidth) {
-        return true;
-    }
 
     @Override
     protected void displayImage(int position,RatioImageView imageView, String url) {

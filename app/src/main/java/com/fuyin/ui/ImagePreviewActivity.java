@@ -89,6 +89,12 @@ public class ImagePreviewActivity extends AppCompatActivity {
     }
 
     private void renderView() {
+        if(imageList==null) return;
+        if(imageList.size()==1){
+            main_linear.setVisibility(View.GONE);
+        }else {
+            main_linear.setVisibility(View.VISIBLE);
+        }
         adapter = new ImagePreviewAdapter(this,imageList,itemPosition);
         viewPager.setAdapter(adapter);
         viewPager.setCurrentItem(mCurrentPosition);

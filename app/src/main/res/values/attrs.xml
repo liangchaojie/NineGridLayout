@@ -6,5 +6,8 @@
 
     <declare-styleable name="NineGridLayout">
         <attr name="sapcing" format="dimension"/>
+        <attr name="oneImageWidth" format="dimension"/>
+        <attr name="oneImageHeight" format="dimension"/>
+        <attr name="image_ratio" format="float"/>
     </declare-styleable>
 </resources>

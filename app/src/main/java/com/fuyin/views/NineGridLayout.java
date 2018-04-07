@@ -14,15 +14,18 @@ import java.util.List;
 import java.util.TimerTask;
 
 /**
- * @Description:
+ * @Description:  九宫格布局显示图片
+ *                1    显示1张图片的时候可以按照自适应或者长宽比
+ *                2    显示2张及2张以上都是正方形
+ *                3    4张图片显示排列方式是 2*2
  * @Author: Liangchaojie
  * @Create On 2018/3/29 18:22
  */
 public abstract class NineGridLayout extends ViewGroup {
     private static final float DEFUALT_SPACING = 3f;
-    private static final int IMAGE_RATIO = 2;//默认图片长宽比例
-    private static final int MAX_COUNT = 9;
-
+    private float image_ratio = 1.7f;//默认图片长宽比例
+    private int oneImageWidth;//一张图的宽度
+    private int oneImageHeight;//一张图的高度
     protected Context mContext;
     private float mSpacing = DEFUALT_SPACING;
     private int mColumns;
@@ -33,18 +36,18 @@ public abstract class NineGridLayout extends ViewGroup {
     private boolean mIsShowAll = false;
     private boolean mIsFirst = true;
     private List<String> mUrlList = new ArrayList<>();
-    private List<ImageView> imageViewList = new ArrayList<>();
 
     public NineGridLayout(Context context) {
-        super(context);
-        init(context);
+        this(context, null);
     }
 
     public NineGridLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.NineGridLayout);
-
         mSpacing = typedArray.getDimension(R.styleable.NineGridLayout_sapcing, DEFUALT_SPACING);
+        oneImageWidth = (int) typedArray.getDimension(R.styleable.NineGridLayout_oneImageWidth, 0);
+        oneImageHeight = (int) typedArray.getDimension(R.styleable.NineGridLayout_oneImageHeight, 0);
+        image_ratio =   typedArray.getFloat(R.styleable.NineGridLayout_image_ratio, image_ratio);
         typedArray.recycle();
         init(context);
     }
@@ -53,67 +56,18 @@ public abstract class NineGridLayout extends ViewGroup {
         mContext = context;
         if (getListSize(mUrlList) == 0) {
             setVisibility(GONE);
+        }else {
+            setVisibility(VISIBLE);
         }
     }
 
 
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec,heightMeasureSpec);
-        MarginLayoutParams params = null;
-        int size = mUrlList == null ? 0 : mUrlList.size();
-        int widthMode = MeasureSpec.getMode(widthMeasureSpec);
-        int widthSize = MeasureSpec.getSize(widthMeasureSpec);
-        int heightMode = MeasureSpec.getMode(heightMeasureSpec);
-        int heightSize = MeasureSpec.getSize(heightMeasureSpec);
-        measureChildren(widthMeasureSpec,heightMeasureSpec);
-        //开始处理wrap_content,如果一个子元素都没有，就设置为0
-        if (size == 0) {
-            setMeasuredDimension(0,0);
-        } else if (widthMode == MeasureSpec.AT_MOST && heightMode == MeasureSpec.AT_MOST) {
-            //ViewGroup，宽，高都是wrap_content，根据我们的需求，宽度是子控件的宽度，高度则是所有子控件的总和
-            View childOne = getChildAt(0);
-            params = (MarginLayoutParams) childOne.getLayoutParams();
-            int childWidth = childOne.getMeasuredWidth();
-            int childHeight = childOne.getMeasuredHeight();
-            setMeasuredDimension(childWidth + params.leftMargin + params.rightMargin,
-                 childHeight * getChildCount()*IMAGE_RATIO + params.topMargin + params.bottomMargin);
-        } else if (widthMode == MeasureSpec.AT_MOST) {
-            //ViewGroup的宽度为wrap_content,则高度不需要管，宽度还是自控件的宽度
-            View childOne = getChildAt(0);
-            params = (MarginLayoutParams) childOne.getLayoutParams();
-            int childWidth = childOne.getMeasuredWidth();
-            setMeasuredDimension(childWidth + params.leftMargin + params.rightMargin,heightSize);
-        } else if (heightMode == MeasureSpec.AT_MOST) {
-            //ViewGroup的高度为wrap_content,则宽度不需要管，高度为子View的高度和
-            View childOne = getChildAt(0);
-            params = (MarginLayoutParams) childOne.getLayoutParams();
-            int childHeight = childOne.getMeasuredHeight();
-            setMeasuredDimension(widthSize, childHeight * getChildCount()*IMAGE_RATIO + params.topMargin + params.bottomMargin);
-        }
-    }
-
-    @Override
-    public LayoutParams generateLayoutParams(AttributeSet attrs) {
-        return new MarginLayoutParams(getContext(),attrs);
-    }
-
-    @Override
-    protected LayoutParams generateDefaultLayoutParams() {
-        return new MarginLayoutParams(LayoutParams.MATCH_PARENT,
-                LayoutParams.MATCH_PARENT);
-    }
-
-    @Override
-    protected LayoutParams generateLayoutParams(LayoutParams p) {
-        return new MarginLayoutParams(p);
-    }
 
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         mTotalWidth = right - left;
         mSingleWidth = (int) ((mTotalWidth - mSpacing * (3 - 1)) / 3);
-        if (mIsFirst) {
+        if (mIsFirst) {//只绘制一次
             notifyDataSetChanged();
             mIsFirst = false;
         }
@@ -146,10 +100,6 @@ public abstract class NineGridLayout extends ViewGroup {
 
         mUrlList.clear();
         mUrlList.addAll(urlList);
-
-        if (!mIsFirst) {
-            notifyDataSetChanged();
-        }
     }
 
     public void notifyDataSetChanged() {
@@ -168,24 +118,20 @@ public abstract class NineGridLayout extends ViewGroup {
             setVisibility(VISIBLE);
         } else {
             setVisibility(GONE);
+            return;
         }
 
         if (size == 1) {
             String url = mUrlList.get(0);
             RatioImageView imageView = createImageView(0, url);
 
-            //避免在ListView中一张图未加载成功时，布局高度受其他item影响
+            getRealOneImageSize();
+            imageView.layout(0, 0, oneImageWidth, oneImageHeight);
             LayoutParams params = getLayoutParams();
-            params.height = mSingleWidth;
+            params.height = oneImageHeight;
             setLayoutParams(params);
-            imageView.layout(0, 0, mSingleWidth, mSingleWidth);
-
-            boolean isShowDefualt = displayOneImage(imageView, url, mTotalWidth);
-            if (isShowDefualt) {
-                layoutImageView(imageView, 0, url);
-            } else {
-                addView(imageView);
-            }
+            addView(imageView);
+            displayImage(0,imageView, url);
             return;
         }
 
@@ -196,6 +142,16 @@ public abstract class NineGridLayout extends ViewGroup {
             String url = mUrlList.get(i);
             RatioImageView imageView = createImageView(i, url);
             layoutImageView(imageView, i, url);
+        }
+    }
+
+    private void getRealOneImageSize() {
+        if(oneImageWidth==0){
+            oneImageWidth = mSingleWidth;
+        }
+
+        if(oneImageHeight==0){
+            oneImageHeight = (int) (oneImageWidth * image_ratio);
         }
     }
 
@@ -210,7 +166,7 @@ public abstract class NineGridLayout extends ViewGroup {
 
     private RatioImageView createImageView(final int i, final String url) {
         final RatioImageView imageView = new RatioImageView(mContext);
-        imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         imageView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -234,11 +190,7 @@ public abstract class NineGridLayout extends ViewGroup {
         int right = left + singleWidth;
         int bottom = top + singleHeight;
 
-        if(getListSize(mUrlList)==1){
-            setOneImageLayoutParams(imageView,singleWidth,singleWidth*IMAGE_RATIO);
-        }else {
-            imageView.layout(left, top, right, bottom);
-        }
+        imageView.layout(left, top, right, bottom);
         addView(imageView);
         displayImage(i,imageView, url);
     }
@@ -287,15 +239,6 @@ public abstract class NineGridLayout extends ViewGroup {
 
     }
 
-    protected void setOneImageLayoutParams(RatioImageView imageView, int width, int height) {
-        imageView.setLayoutParams(new LayoutParams(width, height));
-        imageView.layout(0, 0, width, height);
-
-        LayoutParams params = getLayoutParams();
-        params.height = height;
-        setLayoutParams(params);
-    }
-
     private int getListSize(List<String> list) {
         if (list == null || list.size() == 0) {
             return 0;
@@ -303,13 +246,7 @@ public abstract class NineGridLayout extends ViewGroup {
         return list.size();
     }
 
-    /**
-     * @param imageView
-     * @param url
-     * @param parentWidth 父控件宽度
-     * @return true 代表按照九宫格默认大小显示，false 代表按照自定义宽高显示
-     */
-    protected abstract boolean displayOneImage(RatioImageView imageView, String url, int parentWidth);
+
 
     protected abstract void displayImage(int position,RatioImageView imageView, String url);
 

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <ImageView
         android:id="@+id/user_icon"
         android:src="@mipmap/ic_launcher"
@@ -21,6 +21,8 @@
     <com.fuyin.views.NineGridTestLayout
         android:id="@+id/nineTestlayout"
         android:layout_below="@+id/user_name"
+        app:oneImageWidth="200dp"
+        app:oneImageHeight="340dp"
         android:layout_toRightOf="@+id/user_icon"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
