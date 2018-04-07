@@ -67,7 +67,6 @@ public class ImagePreviewAdapter extends PagerAdapter {
         photoView = (PhotoView) object;
         photoView.setTag(Utils.getNameByPosition(itemPosition,position));
         photoView.setTransitionName(Utils.getNameByPosition(itemPosition,position));
-
     }
 
 

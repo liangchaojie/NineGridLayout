@@ -100,6 +100,9 @@ public abstract class NineGridLayout extends ViewGroup {
 
         mUrlList.clear();
         mUrlList.addAll(urlList);
+        if (!mIsFirst) {//由于使用在RecyclerView中牵扯到复用布局，所以需要判断当前布局是不是第一次使用，是的话就直接绘制，不是的话就移除掉恰他的布局再绘制
+            notifyDataSetChanged();
+        }
     }
 
     public void notifyDataSetChanged() {

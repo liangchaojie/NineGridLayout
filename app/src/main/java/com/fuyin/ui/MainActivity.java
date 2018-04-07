@@ -11,12 +11,13 @@ import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 
 import com.fuyin.R;
+import com.fuyin.adapter.HomeIndexAdapter;
 import com.fuyin.base.BaseHelper;
 import com.fuyin.constans.P;
-import com.fuyin.adapter.HomeIndexAdapter;
 import com.fuyin.interfaces.OnItemPictureClickListener;
 import com.fuyin.model.Girl;
 import com.fuyin.utils.Utils;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -78,7 +79,6 @@ public class MainActivity extends AppCompatActivity {
                 intent.putStringArrayListExtra("imageList", (ArrayList<String>) urlList);
                 intent.putExtra(P.START_ITEM_POSITION, itemPosition);
                 intent.putExtra(P.START_IAMGE_POSITION, position);
-
                 ActivityOptions compat = ActivityOptions.makeSceneTransitionAnimation(MainActivity.this, imageView, imageView.getTransitionName());
                 startActivity(intent, compat.toBundle());
             }
