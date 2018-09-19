@@ -56,8 +56,7 @@ public class ImagePreviewAdapter extends PagerAdapter {
 
         Picasso.with(context).load(imageList.get(position)).into(image);
 
-
-       image.setOnClickListener(new View.OnClickListener() {
+        image.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
                image.setEnabled(false);
