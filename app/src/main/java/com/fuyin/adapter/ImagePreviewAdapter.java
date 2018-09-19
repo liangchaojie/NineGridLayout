@@ -3,15 +3,22 @@ package com.fuyin.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
+import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.fuyin.utils.Utils;
+import com.github.chrisbanes.photoview.OnPhotoTapListener;
+import com.github.chrisbanes.photoview.OnScaleChangedListener;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * @Description:
@@ -45,7 +52,7 @@ public class ImagePreviewAdapter extends PagerAdapter {
         image.setEnabled(true);
         image.setScaleType(ImageView.ScaleType.FIT_CENTER);
         image.setMaximumScale(2.0F);
-        image.setMinimumScale(0.8F);
+        image.setMinimumScale(0.8f);
 
         Picasso.with(context).load(imageList.get(position)).into(image);
 
