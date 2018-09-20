@@ -5,10 +5,9 @@ import android.content.Context;
 import android.support.v4.view.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
+import com.bm.library.PhotoView;
 import com.fuyin.utils.Utils;
-import com.github.chrisbanes.photoview.PhotoView;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -43,11 +42,8 @@ public class ImagePreviewAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(ViewGroup container, final int position) {
         final PhotoView image = new PhotoView(context);
-        image.setEnabled(true);
-        image.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        image.setMaximumScale(2.0F);
-        image.setMinimumScale(0.8f);
-
+        // 启用图片缩放功能
+        image.enable();
         Picasso.with(context).load(imageList.get(position)).into(image);
 
 

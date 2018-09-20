@@ -25,6 +25,6 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     implementation 'com.android.support:design:27.1.0'
-    implementation 'com.github.chrisbanes:PhotoView:2.0.0'
+    implementation 'com.bm.photoview:library:1.4.1'
     implementation 'com.squareup.picasso:picasso:2.5.2'
 }
