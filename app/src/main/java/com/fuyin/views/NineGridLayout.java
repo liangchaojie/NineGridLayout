@@ -6,6 +6,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.fuyin.R;
 
@@ -18,11 +19,12 @@ import java.util.TimerTask;
  *                1    显示1张图片的时候可以按照自适应或者长宽比
  *                2    显示2张及2张以上都是正方形
  *                3    4张图片显示排列方式是 2*2
+ *                4   一行最多三张图片
  * @Author: Liangchaojie
  * @Create On 2018/3/29 18:22
  */
 public abstract class NineGridLayout extends ViewGroup {
-    private static final float DEFUALT_SPACING = 3f;
+    private static final float DEFUALT_SPACING = 15f;
     private float image_ratio = 1.7f;//默认图片长宽比例
     private int oneImageWidth;//一张图的宽度
     private int oneImageHeight;//一张图的高度
@@ -33,7 +35,6 @@ public abstract class NineGridLayout extends ViewGroup {
     private int mTotalWidth;
     private int mSingleWidth;
 
-    private boolean mIsShowAll = false;
     private boolean mIsFirst = true;
     private List<String> mUrlList = new ArrayList<>();
 
@@ -67,29 +68,17 @@ public abstract class NineGridLayout extends ViewGroup {
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         mTotalWidth = right - left;
         mSingleWidth = (int) ((mTotalWidth - mSpacing * (3 - 1)) / 3);
-        if (mIsFirst) {//只绘制一次
+        if (mIsFirst) {
             notifyDataSetChanged();
             mIsFirst = false;
         }
     }
 
-    /**
-     * 设置间隔
-     *
-     * @param spacing
-     */
+
     public void setSpacing(float spacing) {
         mSpacing = spacing;
     }
 
-    /**
-     * 设置是否显示所有图片（超过最大数时）
-     *
-     * @param isShowAll
-     */
-    public void setIsShowAll(boolean isShowAll) {
-        mIsShowAll = isShowAll;
-    }
 
     public void setUrlList(List<String> urlList) {
         if (getListSize(urlList) == 0) {
@@ -100,7 +89,8 @@ public abstract class NineGridLayout extends ViewGroup {
 
         mUrlList.clear();
         mUrlList.addAll(urlList);
-        if (!mIsFirst) {//由于使用在RecyclerView中牵扯到复用布局，所以需要判断当前布局是不是第一次使用，是的话就直接绘制，不是的话就移除掉恰他的布局再绘制
+        //由于RecyclerView中牵扯到复用布局，所以需要判断当前布局是不是第一次使用，是的话就直接绘制，不是的话就移除掉恰他的布局再绘制
+        if (!mIsFirst) {
             notifyDataSetChanged();
         }
     }
@@ -160,8 +150,6 @@ public abstract class NineGridLayout extends ViewGroup {
 
     private void layoutParams() {
         int singleHeight = mSingleWidth;
-
-        //根据子view数量确定高度
         LayoutParams params = getLayoutParams();
         params.height = (int) (singleHeight * mRows + mSpacing * (mRows - 1));
         setLayoutParams(params);
@@ -174,6 +162,14 @@ public abstract class NineGridLayout extends ViewGroup {
             @Override
             public void onClick(View v) {
                 onClickImage(i, url, mUrlList,imageView);
+            }
+        });
+        imageView.setOnLongClickListener(new OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Toast.makeText(mContext,"你长按我干啥",Toast.LENGTH_SHORT).show();
+                //注意这里要返回true防止OnClickListener处理长按事件
+                return true;
             }
         });
         return imageView;
@@ -229,21 +225,13 @@ public abstract class NineGridLayout extends ViewGroup {
             }
         } else {
             mColumns = 3;
-            if (mIsShowAll) {
-                mRows = length / 3;
-                int b = length % 3;
-                if (b > 0) {
-                    mRows++;
-                }
-            } else {
-                mRows = 3;
-            }
+            mRows = 3;
         }
 
     }
 
     private int getListSize(List<String> list) {
-        if (list == null || list.size() == 0) {
+        if (list == null) {
             return 0;
         }
         return list.size();

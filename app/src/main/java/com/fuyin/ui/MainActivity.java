@@ -64,10 +64,10 @@ public class MainActivity extends AppCompatActivity {
         imageList.add("http://img.mp.sohu.com/upload/20170703/c8c1818222a547f78585f9b357c93613_th.png");
 
         girlList = new ArrayList<>();
-        for(int i=0;i<10;i++){
+        for(int i=0;i<9;i++){
             Girl girl = new Girl();
-            girl.setName("梁超杰第"+i+"条说说!");
-            girl.setImageList(imageList);
+            girl.setName("梁超杰第"+(i+1)+"条说说!");
+            girl.setImageList(wrapList(i,imageList));
             girlList.add(girl);
         }
 
@@ -83,6 +83,18 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent, compat.toBundle());
             }
         });
+    }
+
+    private List<String> wrapList(int position, List<String> imageList) {
+        List<String> stringList = new ArrayList<>();
+        for (int i=0;i<imageList.size();i++){
+            if(i>position){
+                break;
+            }else {
+                stringList.add(imageList.get(i));
+            }
+        }
+        return stringList;
     }
 
 
