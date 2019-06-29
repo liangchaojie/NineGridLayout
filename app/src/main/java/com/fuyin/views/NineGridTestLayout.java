@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
+import com.fuyin.R;
 import com.fuyin.interfaces.OnItemPictureClickListener;
 import com.fuyin.utils.Utils;
 import com.squareup.picasso.Picasso;
@@ -32,7 +33,7 @@ public class NineGridTestLayout extends NineGridLayout {
     @Override
     protected void displayImage(int position,RatioImageView imageView, String url) {
         if(context!=null){
-            Picasso.with(context).load(url).into(imageView);
+            Picasso.with(context).load(url).error(context.getResources().getDrawable(R.mipmap.head)).into(imageView);
             imageView.setTag(Utils.getNameByPosition(itemPosition,position));
             imageView.setTransitionName(Utils.getNameByPosition(itemPosition,position));
         }

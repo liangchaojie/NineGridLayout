@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
         girlList = new ArrayList<>();
         for(int i=0;i<10;i++){
             Girl girl = new Girl();
-            girl.setName("梁超杰"+i+"号!");
+            girl.setName("梁超杰第"+i+"条说说!");
             girl.setImageList(imageList);
             girlList.add(girl);
         }

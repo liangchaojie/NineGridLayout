@@ -42,6 +42,8 @@ public class MomentHolder extends BaseHolder<Girl> {
         nineGridTestLayout.setIsShowAll(false); //当传入的图片数超过9张时，是否全部显示
         nineGridTestLayout.setSpacing(5); //动态设置图片之间的间隔
         nineGridTestLayout.setUrlList(girl.getImageList());
+
+        imageViewUserIcon.setImageResource(R.mipmap.head);
     }
 
 
