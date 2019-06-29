@@ -3,9 +3,10 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ff171b19"
+    android:background="#FF171b19"
     android:orientation="vertical" >
     <com.fuyin.views.CustomViewPager
+        android:layout_above="@+id/main_linear"
         android:id="@+id/imageBrowseViewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
@@ -14,6 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
+        android:layout_marginBottom="50dp"
         android:gravity="center"
         android:orientation="horizontal" />
 </RelativeLayout>

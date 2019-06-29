@@ -70,8 +70,9 @@ public class ImagePreviewActivity extends AppCompatActivity {
             @Override
             public void transformPage(@NonNull View page, float position) {
                 final float normalizedposition = Math.abs(Math.abs(position) - 1);
-                page.setScaleX(normalizedposition/2  + 0.5f);
-                page.setScaleY(normalizedposition/2  + 0.5f);
+                page.setScaleX(normalizedposition/2 + 0.5f);
+                page.setScaleY(normalizedposition/2 + 0.5f);
+
             }
         });
     }
@@ -122,7 +123,7 @@ public class ImagePreviewActivity extends AppCompatActivity {
             view.setBackgroundResource(R.drawable.indicator);
             view.setEnabled(false);
             //设置宽高
-            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(20, 20);
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(15, 15);
             //设置间隔
             if (!pic.equals(imageList.get(0))) {
                 layoutParams.leftMargin = 20;

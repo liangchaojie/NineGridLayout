@@ -3,10 +3,13 @@ package com.fuyin.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import com.bm.library.PhotoView;
+import com.fuyin.R;
 import com.fuyin.utils.Utils;
 import com.squareup.picasso.Picasso;
 
@@ -41,21 +44,24 @@ public class ImagePreviewAdapter extends PagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup container, final int position) {
-        final PhotoView image = new PhotoView(context);
-        // 启用图片缩放功能
-        image.enable();
-        Picasso.with(context).load(imageList.get(position)).into(image);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_imageview, null);
+        final PhotoView photoView = view.findViewById(R.id.photo_view);
+        photoView.enable();
+        Picasso.with(context).load(imageList.get(position)).into(photoView);
 
 
-        image.setOnClickListener(new View.OnClickListener() {
+        photoView.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
-               image.setEnabled(false);
+               photoView.setEnabled(false);
                ((Activity)context).onBackPressed();
            }
        });
-        container.addView(image);
-        return image;
+        if(photoView.getParent()!=null){
+            ((RelativeLayout)photoView.getParent()).removeAllViews();
+        }
+        container.addView(photoView);
+        return photoView;
     }
 
     @Override

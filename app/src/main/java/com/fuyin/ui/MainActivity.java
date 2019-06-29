@@ -133,12 +133,12 @@ public class MainActivity extends AppCompatActivity {
                 int currentPosition = mReenterState.getInt(P.CURRENT_IAMGE_POSITION);
                 if (startingPosition != currentPosition) {//如果不是之前的那张图片就切换到指定的图片
                     String newTransitionName = Utils.getNameByPosition(itemPosition,currentPosition);
-                    View newSharedElement = recyclerView.findViewWithTag(newTransitionName);
-                    if (newSharedElement != null) {
+                    View view = recyclerView.findViewWithTag(newTransitionName);
+                    if (view != null) {
                         names.clear();
                         names.add(newTransitionName);
                         sharedElements.clear();
-                        sharedElements.put(newTransitionName, newSharedElement);
+                        sharedElements.put(newTransitionName, view);
                     }
                 }
                 mReenterState = null;
